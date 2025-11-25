@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>QuizMaster Pro</span>
+            </div>
+            <div class="header-controls">
+                <div class="user-info">
+                    <span id="userName">Guest</span>
+                    <button id="userNameEdit" class="btn-icon" title="Edit name">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+                <button id="darkModeToggle" class="btn-icon" title="Toggle dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="homePage" class="page active">
+            <div class="container">
+                <div class="welcome-section">
+                    <h1>Welcome, <span id="displayUserName">Guest</span>!</h1>
+                    <p>Test your knowledge and track your progress</p>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalQuestions">0</h3>
+                            <p>Total Questions</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="accuracyRate">0%</h3>
+                            <p>Accuracy Rate</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalQuizzes">0</h3>
+                            <p>Quizzes Taken</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start New Quiz Button -->
+                <div class="action-section">
+                    <button id="startNewQuiz" class="btn-primary btn-large">
+                        <i class="fas fa-plus"></i>
+                        Start New Quiz
+                    </button>
+                </div>
+
+                <!-- Quiz History -->
+                <div class="history-section">
+                    <h2>Your Quiz History</h2>
+                    <div id="quizHistoryContainer" class="history-container">
+                        <!-- History will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Setup Steps -->
+        <section id="quizSetup" class="page">
+            <div class="container">
+                <div class="setup-header">
+                    <h1>Create New Quiz</h1>
+                    <div class="progress-steps">
+                        <div class="step active" data-step="1">
+                            <span>1</span>
+                            <p>Subject</p>
+                        </div>
+                        <div class="step" data-step="2">
+                            <span>2</span>
+                            <p>Topic</p>
+                        </div>
+                        <div class="step" data-step="3">
+                            <span>3</span>
+                            <p>Difficulty</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Subject Selection -->
+                <div id="step1" class="setup-step active">
+                    <h2>Select a Subject</h2>
+                    <div id="subjectList" class="option-grid">
+                        <!-- Subjects will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Step 2: Topic Selection -->
+                <div id="step2" class="setup-step">
+                    <h2>Select a Topic</h2>
+                    <div id="topicList" class="option-grid">
+                        <!-- Topics will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Step 3: Difficulty Selection -->
+                <div id="step3" class="setup-step">
+                    <h2>Select Difficulty</h2>
+                    <div id="difficultyList" class="option-grid">
+                        <!-- Difficulties will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="setup-navigation">
+                    <button id="backToHome" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Home
+                    </button>
+                    <button id="prevStep" class="btn-secondary" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button id="nextStep" class="btn-primary" disabled>
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="startQuiz" class="btn-primary" style="display: none;">
+                        Start Quiz
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Page -->
+        <section id="quizPage" class="page">
+            <div class="container">
+                <div class="quiz-header">
+                    <div class="quiz-info">
+                        <h2 id="quizSubjectTopic">Quiz</h2>
+                        <p id="quizDifficulty">Difficulty: Medium</p>
+                    </div>
+                    <div class="quiz-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timerDisplay">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentQuestionNumber">1</span> of 
+                        <span id="totalQuestionsCount">10</span>
+                    </div>
+                </div>
+
+                <!-- Question Display -->
+                <div class="question-container">
+                    <div class="question-text">
+                        <h3 id="questionText">Question text will appear here</h3>
+                    </div>
+                    
+                    <!-- Code Block (if exists) -->
+                    <div id="codeBlock" class="code-block" style="display: none;">
+                        <pre><code id="questionCode"></code></pre>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="options-container">
+                        <div id="optionsList" class="options-list">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Navigation -->
+                <div class="quiz-navigation">
+                    <button id="prevQuestion" class="btn-secondary">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button id="nextQuestion" class="btn-primary">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="submitQuiz" class="btn-danger">
+                        Submit Quiz
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Page -->
+        <section id="resultsPage" class="page">
+            <div class="container">
+                <div class="results-header">
+                    <div id="performanceIcon" class="performance-icon">
+                        <i class="fas fa-meh"></i>
+                    </div>
+                    <h1 id="performanceText">Good Job!</h1>
+                    <p id="performanceSubtext">You completed the quiz</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="results-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="correctAnswers">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="incorrectAnswers">0</div>
+                        <div class="stat-label">Incorrect</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="unansweredQuestions">0</div>
+                        <div class="stat-label">Unanswered</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="scorePercentage">0%</div>
+                        <div class="stat-label">Score</div>
+                    </div>
+                </div>
+
+                <!-- Time and Details -->
+                <div class="results-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Time Taken:</span>
+                        <span id="timeTaken" class="detail-value">00:00</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Subject:</span>
+                        <span id="resultSubject" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Topic:</span>
+                        <span id="resultTopic" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Difficulty:</span>
+                        <span id="resultDifficulty" class="detail-value">-</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="results-actions">
+                    <button id="reviewQuiz" class="btn-secondary">
+                        <i class="fas fa-chart-bar"></i>
+                        Review Answers
+                    </button>
+                    <button id="newQuizFromResults" class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Quiz
+                    </button>
+                    <button id="backToHomeFromResults" class="btn-secondary">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Page -->
+        <section id="analysisPage" class="page">
+            <div class="container">
+                <div class="analysis-header">
+                    <h1>Quiz Analysis</h1>
+                    <p>Review your answers and learn from mistakes</p>
+                </div>
+
+                <!-- Analysis Navigation -->
+                <div class="analysis-navigation">
+                    <button id="prevAnalysisQuestion" class="btn-secondary">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <span class="analysis-counter">
+                        Question <span id="analysisCurrentQuestion">1</span> of 
+                        <span id="analysisTotalQuestions">10</span>
+                    </span>
+                    <button id="nextAnalysisQuestion" class="btn-primary">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Question Analysis -->
+                <div class="analysis-container">
+                    <div class="question-analysis">
+                        <div class="question-text">
+                            <h3 id="analysisQuestionText">Question text</h3>
+                        </div>
+                        
+                        <!-- Code Block (if exists) -->
+                        <div id="analysisCodeBlock" class="code-block" style="display: none;">
+                            <pre><code id="analysisQuestionCode"></code></pre>
+                        </div>
+
+                        <!-- Options with status -->
+                        <div class="analysis-options">
+                            <div id="analysisOptionsList" class="options-list">
+                                <!-- Options with status will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Explanation -->
+                        <div id="analysisExplanation" class="explanation" style="display: none;">
+                            <h4>Explanation:</h4>
+                            <p id="explanationText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Actions -->
+                <div class="analysis-actions">
+                    <button id="backToResults" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Results
+                    </button>
+                    <button id="backToHomeFromAnalysis" class="btn-primary">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- User Name Modal -->
+    <div id="userNameModal" class="modal">
+        <div class="modal-content">
+            <h2>Enter Your Name</h2>
+            <input type="text" id="userNameInput" placeholder="Your name" maxlength="20">
+            <div class="modal-actions">
+                <button id="saveUserName" class="btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
+    <!-- Professional Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <i class="fas fa-brain"></i>
+                    <span>QuizMaster Pro</span>
+                </div>
+                <p class="footer-tagline">Master your knowledge, one quiz at a time</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" class="footer-link" onclick="showHomePage()">Home</a></li>
+                        <li><a href="#" class="footer-link" onclick="showQuizSetup()">New Quiz</a></li>
+                        <li><a href="#" class="footer-link" onclick="showHomePage()">History</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Notes</h4>
+                    <ul>
+                        <li><a href="#" class="footer-link" data-subject="C Language">C Language</a></li>
+                        <li><a href="#" class="footer-link" data-subject="Mathematics">Mathematics</a></li>
+                        <li><a href="#" class="footer-link" data-subject="Science">Science</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Portfolio">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <i class="fas fa-heart"></i>
+                <span>Developed with passion by <strong>Shiva Chaudhary</strong></span>
+            </div>
+            <div class="footer-legal">
+                <span>Copyright © 2025 All rights reserved</span>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
